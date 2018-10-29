@@ -31,10 +31,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "HomeController", urlPatterns = {"/index"})
 public class HomeController extends HttpServlet {
 
+  private static final Logger log = Logger.getLogger(HomeController.class.getName());
   @EJB
   private CategoriaFacade categoriaFacade;
 
-  private static final Logger log = Logger.getLogger(HomeController.class.getName());
   @EJB
   private ProductoFacade productoFacade;
 
@@ -49,10 +49,12 @@ public class HomeController extends HttpServlet {
       List<BusquedaProducto> productos = productoProductorFacade.spBuscarHome();
       request.setAttribute("productos", productos);
       
-      List<Producto> menuProductos = productoFacade.findAll();
+//      List<Producto> menuProductos = productoFacade.findAll();
+      List<Producto> menuProductos = productoFacade.spTodos();
       request.getSession().setAttribute("menuProductos", menuProductos);
       
-      List<Categoria> categorias = categoriaFacade.findAll();
+//      List<Categoria> categorias = categoriaFacade.findAll();
+      List<Categoria> categorias = categoriaFacade.spTodos();
       request.getSession().setAttribute("categorias", categorias);
 //      categorias.get(0).getProductoList()
       request.getRequestDispatcher("index.jsp").forward(request, response);

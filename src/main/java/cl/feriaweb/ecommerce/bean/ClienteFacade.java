@@ -62,6 +62,7 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
   private final String P_ELIMINADO = "P_ELIMINADO";
   private final String P_CURSOR = "P_CURSOR";
 
+  private final String SP_BUSCAR = "PKG_CLIENTE.SP_BUSCAR";
   private final String SP_BUSCAR_POR_EMAIL = "PKG_CLIENTE.SP_BUSCAR_POR_EMAIL";
   private final String SP_ACTIVAR_CUENTA = "PKG_CLIENTE.SP_ACTIVAR_CUENTA";
   private final String SP_AGREGAR = "PKG_CLIENTE.SP_AGREGAR";
@@ -132,6 +133,22 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
       sp.registerStoredProcedureParameter(P_EMAIL, String.class, ParameterMode.IN);
       sp.registerStoredProcedureParameter(P_CURSOR, void.class, ParameterMode.REF_CURSOR);
       sp.setParameter(P_EMAIL, email);
+      sp.execute();
+      cliente = (Cliente) sp.getSingleResult();
+    } catch (Exception e) {
+      log.log(Level.SEVERE, e.getMessage());
+    } finally {
+      return cliente;
+    }
+  }
+
+  public Cliente spBuscar(int id) {
+    Cliente cliente = null;
+    try {
+      StoredProcedureQuery sp = em.createStoredProcedureQuery(SP_BUSCAR, Cliente.class);
+      sp.registerStoredProcedureParameter(P_ID, Number.class, ParameterMode.IN);
+      sp.registerStoredProcedureParameter(P_CURSOR, void.class, ParameterMode.REF_CURSOR);
+      sp.setParameter(P_ID, id);
       sp.execute();
       cliente = (Cliente) sp.getSingleResult();
     } catch (Exception e) {

@@ -33,7 +33,8 @@ public class FotoController extends HttpServlet {
     try {
       String id = request.getParameter("id");
       if (id != null) {
-        Producto producto = productoFacade.find(Integer.parseInt(id));
+//        Producto producto = productoFacade.find(Integer.parseInt(id));
+        Producto producto = productoFacade.spBuscar(Integer.parseInt(id));
         response.getOutputStream().write(producto.getFoto());
       }
     } catch (Exception e) {

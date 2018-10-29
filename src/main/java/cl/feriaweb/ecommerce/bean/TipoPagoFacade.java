@@ -20,9 +20,11 @@ import javax.persistence.ParameterMode;
  */
 @Stateless
 public class TipoPagoFacade extends AbstractFacade<TipoPago> {
+
   private final static Logger log = Logger.getLogger(TipoPagoFacade.class.getName());
 
   private final String SP_AGREGAR = "PKG_TIPO_PAGO.SP_AGREGAR";
+  private final String SP_BUSCAR = "PKG_TIPO_PAGO.SP_BUSCAR";
   private final String P_ID = "P_ID";
   private final String P_NOMBRE = "P_NOMBRE";
   private final String P_ELIMINADO = "P_ELIMINADO";
@@ -39,6 +41,21 @@ public class TipoPagoFacade extends AbstractFacade<TipoPago> {
 
   public TipoPagoFacade() {
     super(TipoPago.class);
+  }
+
+  public TipoPago spBuscar(int id) {
+    TipoPago tipoPago = null;
+    try {
+      StoredProcedureQuery sp = em.createStoredProcedureQuery(SP_BUSCAR, TipoPago.class);
+      sp.registerStoredProcedureParameter(P_ID, Number.class, ParameterMode.IN);
+      sp.registerStoredProcedureParameter(P_CURSOR, void.class, ParameterMode.REF_CURSOR);
+      sp.setParameter(P_ID, id);
+      sp.execute();
+      tipoPago = (TipoPago) sp.getSingleResult();
+    } catch (Exception e) {
+      log.log(Level.SEVERE, e.getMessage());
+    }
+    return tipoPago;
   }
 
   public boolean spAgregar(TipoPago tipoPago) {

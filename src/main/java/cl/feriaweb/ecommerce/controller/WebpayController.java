@@ -41,45 +41,25 @@ import org.apache.commons.lang.RandomStringUtils;
  * @author Alejandro
  */
 @WebServlet(name = "WebpayController", urlPatterns = {"/webpay"})
-@ServletSecurity(@HttpConstraint(rolesAllowed = "CLIENTE"))
+@ServletSecurity(
+        @HttpConstraint(rolesAllowed = "CLIENTE"))
 public class WebpayController extends HttpServlet {
 
+  private static final Logger log = Logger.getLogger(WebpayController.class.getName());
   @EJB
   private OrdenCompraFacade ordenCompraFacade;
-
   @EJB
   private TipoDespachoFacade tipoDespachoFacade;
-
   @EJB
   private ClienteFacade clienteFacade;
-
   @EJB
   private TipoPagoFacade tipoPagoFacade;
 
   private final String CARRO_COMPRA = "CARRO_COMPRA";
-
   private static final String IN_ACTION = "action";
   private static final String WEBPAY_NORMAL_INIT = "webpayNormalInit";
   private static final String WEBPAY_NORMAL_GET_RESULT = "webpayNormalGetResult";
   private static final String WEBPAY_NORMAL_END = "end";
-
-  private static final Logger log = Logger.getLogger(WebpayController.class.getName());
-
-  @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String public_cert_file = System.getProperty("user.dir") + "\\597020000540.crt";
-    String public_cert = new String(Files.readAllBytes(Paths.get(public_cert_file)));
-
-    String private_key_file = System.getProperty("user.dir") + "\\597020000540.key";
-    String private_key = new String(Files.readAllBytes(Paths.get(private_key_file)));
-
-    String webpay_cert_file = System.getProperty("user.dir") + "\\tbk.pem.crt";
-    String webpay_cert = new String(Files.readAllBytes(Paths.get(webpay_cert_file)));
-
-    System.out.println(public_cert);
-    System.out.println(private_key);
-    System.out.println(webpay_cert);
-  }
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -120,13 +100,11 @@ public class WebpayController extends HttpServlet {
     ordenCompra.setTotal(totalCarro);
     ordenCompra.setFechaCompra(new Date());
     ordenCompra.setFechaModificacion(new Date());
-    ordenCompra.setTipoPagoId(tipoPagoFacade.find(1));
+    ordenCompra.setTipoPagoId(tipoPagoFacade.spBuscar(1));
     ordenCompra.setIpOrigen(request.getRemoteAddr());
-    ordenCompra.setClienteId(clienteFacade.find(1));
-    ordenCompra.setTipoDespachoId(tipoDespachoFacade.find(1));
-
+    ordenCompra.setClienteId(clienteFacade.spBuscar(1));
+    ordenCompra.setTipoDespachoId(tipoDespachoFacade.spBuscar(1));
     request.getSession().setAttribute("oc", ordenCompra);
-
     String buyOrder = RandomStringUtils.randomAlphanumeric(16);
     Webpay webpay = new Webpay(WebpayUtils.getConfiguration());
     WsInitTransactionOutput result = new WsInitTransactionOutput();

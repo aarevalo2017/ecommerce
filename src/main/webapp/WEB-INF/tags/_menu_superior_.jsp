@@ -23,8 +23,8 @@
                 <c:forEach items="${cat.getProductoList()}" var="p">
                   <li style="width: 210px">
                     <a href="${pageContext.servletContext.contextPath}/servlet/producto?accion=pdp&idp=${p.getId()}">
-                      <!--<img width="32" height="32" src="${basePath}${p.getDescripcionHtml()}"/>-->
-                      <img width="32" height="32" src="${pageContext.servletContext.contextPath}/servlet/foto?id=${p.getId()}"/>
+                      <img width="32" height="32" src="${basePath}${p.getDescripcionHtml()}"/>
+                      <!--<img width="32" height="32" src="${pageContext.servletContext.contextPath}/servlet/foto?id=${p.getId()}"/>-->
                       &nbsp;&nbsp;${p.getNombre()}
                     </a>
                   </li>

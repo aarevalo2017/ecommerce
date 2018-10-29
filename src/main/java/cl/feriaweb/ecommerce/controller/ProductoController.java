@@ -9,11 +9,9 @@ import cl.feriaweb.ecommerce.bean.CategoriaFacade;
 import cl.feriaweb.ecommerce.bean.ProductoFacade;
 import cl.feriaweb.ecommerce.bean.ProductoProductorFacade;
 import cl.feriaweb.ecommerce.entity.BusquedaProducto;
-import cl.feriaweb.ecommerce.entity.Categoria;
 import cl.feriaweb.ecommerce.entity.Producto;
 import cl.feriaweb.ecommerce.entity.ProductoProductor;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -147,7 +145,8 @@ public class ProductoController extends HttpServlet {
     try {
       int idp = Integer.parseInt(request.getParameter(IN_ID_PRODUCTO));
 //      ProductoProductor producto = productoProductorFacade.find(idp);
-      Producto producto = productoFacade.find(idp);
+//      Producto producto = productoFacade.find(idp);
+      Producto producto = productoFacade.spBuscar(idp);
       List<ProductoProductor> productores = producto.getProductoProductorList();
       request.setAttribute("producto", producto);
       request.setAttribute("productores", productores);

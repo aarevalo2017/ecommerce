@@ -7,7 +7,6 @@ package cl.feriaweb.ecommerce.controller;
 
 import cl.feriaweb.ecommerce.bean.ClienteFacade;
 import cl.feriaweb.ecommerce.bean.DireccionFacade;
-import cl.feriaweb.ecommerce.bean.EstadoUsuarioFacade;
 import cl.feriaweb.ecommerce.bean.PasswordResetFacade;
 import cl.feriaweb.ecommerce.entity.Cliente;
 import cl.feriaweb.ecommerce.entity.Direccion;
@@ -45,6 +44,10 @@ public class ClienteController extends HttpServlet {
 
   @EJB
   private DireccionFacade direccionFacade;
+  @EJB
+  private PasswordResetFacade passwordResetFacade;
+  @EJB
+  private ClienteFacade clienteFacade;
 
   private static final String IN_TOKEN = "token";
   private static final String IN_ACCION = "accion";
@@ -55,20 +58,10 @@ public class ClienteController extends HttpServlet {
   private static final String IN_PASSWORD = "password";
   private static final String IN_PASSWORD_CONFIRM = "passwordConfirm";
   private static final String IN_RECIBE_OFERTAS = "recibeOfertas";
-
   private static final String ACC_RECUPERAR_PASSWORD = "recuperarPassword";
   private static final String ACC_LOGOUT = "logout";
   private static final String ACC_OBTENER_DIRECCIONES = "obtenerDirecciones";
   private static final String ACC_AGREGAR_DIRECCION = "agregarDireccion";
-
-  @EJB
-  private PasswordResetFacade passwordResetFacade;
-
-  @EJB
-  private EstadoUsuarioFacade estadoUsuarioFacade;
-
-  @EJB
-  private ClienteFacade clienteFacade;
 
   final static Logger log = Logger.getLogger(ClienteController.class.getName());
   String url = "";
@@ -280,7 +273,7 @@ public class ClienteController extends HttpServlet {
     JsonArrayBuilder jsonResp = Json.createArrayBuilder();
     try {
       int idc = Integer.parseInt(request.getParameter("idc"));
-      Cliente cliente = clienteFacade.find(idc);
+      Cliente cliente = clienteFacade.spBuscar(idc);
       List<Direccion> direcciones = cliente.getDireccionList();
       for (Direccion direccion : direcciones) {
         System.out.println(direccion.getAlias());
@@ -314,7 +307,6 @@ public class ClienteController extends HttpServlet {
       int codigoComuna = Integer.parseInt(request.getParameter("comuna"));
       int codPostal = Integer.parseInt(request.getParameter("cod-postal"));
       String alias = request.getParameter("alias");
-      
       Direccion dir = new Direccion();
       dir.setDireccion(direccion);
       dir.setCodigoComuna(codigoComuna);
@@ -328,8 +320,6 @@ public class ClienteController extends HttpServlet {
       dir.setLongitud(BigDecimal.valueOf(-70.555));
       dir.setNombre("Alejandro");
       direccionFacade.spAgregar(dir);
-      
-//      direccionFacade.create(dir);
         jsonResp.add(Json.createObjectBuilder()
                 .add("id", dir.getId())
                 .add("alias", dir.getAlias())
