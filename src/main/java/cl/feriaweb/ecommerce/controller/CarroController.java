@@ -9,10 +9,9 @@ import cl.feriaweb.ecommerce.bean.ProductoFacade;
 import cl.feriaweb.ecommerce.bean.ProductoProductorFacade;
 import cl.feriaweb.ecommerce.entity.CarroCompra;
 import cl.feriaweb.ecommerce.entity.DetalleCarro;
-import cl.feriaweb.ecommerce.entity.Producto;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,9 +25,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.HTTP;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  *
@@ -41,9 +37,7 @@ public class CarroController extends HttpServlet {
   private final String CARRO_COMPRA = "CARRO_COMPRA";
   private final String ACC_AGREGAR_PRODUCTO = "agregar";
   private final String ACC_ELIMINAR_PRODUCTO = "eliminar";
-
-  @EJB
-  private ProductoFacade productoFacade;
+  private final String ACC_ACTUALIZAR = "actualizar";
 
   private static final Logger log = Logger.getLogger(CarroController.class.getName());
 
@@ -82,7 +76,7 @@ public class CarroController extends HttpServlet {
         jsonProducto.add("cantidad", cantidad);
         jsonProducto.add("medida", medida);
         jsonProducto.add("precio", precio);
-        jsonProducto.add("url_pdp", request.getContextPath()+ "/servlet/producto?accion=pdp&idp=" + id);
+        jsonProducto.add("url_pdp", request.getContextPath() + "/servlet/producto?accion=pdp&idp=" + id);
         jsonResp.add(jsonProducto);
       }
     } catch (Exception e) {
@@ -105,6 +99,9 @@ public class CarroController extends HttpServlet {
           break;
         case ACC_ELIMINAR_PRODUCTO:
           eliminarProducto(request, response);
+          break;
+        case ACC_ACTUALIZAR:
+          actualizarProducto(request, response);
           break;
         default:
           response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -172,7 +169,6 @@ public class CarroController extends HttpServlet {
       DetalleCarro item = new DetalleCarro();
       item.setId(detalleItem.size());
       item.setCantidad(cantidad);
-//      item.setProductoProductorId(productoProductorFacade.find(idProductoProductor));
       item.setProductoProductorId(productoProductorFacade.spBuscar(idProductoProductor));
       boolean existeItem = false;
       for (DetalleCarro detalle : detalleItem) {
@@ -194,6 +190,36 @@ public class CarroController extends HttpServlet {
               .add("total", totalItems + " Producto(s) - $ " + totalCarro);
     } catch (Exception e) {
       jsonResp = Json.createObjectBuilder().add("redirect", "redirect...");
+      log.log(Level.SEVERE, e.getMessage());
+    } finally {
+      out.print(jsonResp.build());
+    }
+  }
+
+  private void actualizarProducto(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    PrintWriter out = response.getWriter();
+    response.setCharacterEncoding("UTF-8");
+    JsonObjectBuilder jsonResp = null;
+    try {
+      CarroCompra carro = (CarroCompra) request.getSession().getAttribute(CARRO_COMPRA);
+      int idProductoProductor = Integer.parseInt(request.getParameter("id_producto"));
+      int cant = Integer.parseInt(request.getParameter("cant"));
+      List<DetalleCarro> detalleItem = carro.getDetalleCarroList();
+      for (DetalleCarro detalle : detalleItem) {
+        if (detalle.getProductoProductorId().getId() == idProductoProductor) {
+          detalle.setCantidad(detalle.getCantidad() + cant);
+          break;
+        }
+      }
+      int totalCarro = 0;
+      for (DetalleCarro detalleCarro : carro.getDetalleCarroList()) {
+        totalCarro += (detalleCarro.getCantidad() * detalleCarro.getProductoProductorId().getPrecio());
+      }
+      int totalItems = carro.getDetalleCarroList().size();
+      jsonResp = Json.createObjectBuilder().add("totalCarro", totalCarro)
+              .add("totalItems", totalItems);
+    } catch (Exception e) {
+      jsonResp = Json.createObjectBuilder().add("error", e.getMessage());
       log.log(Level.SEVERE, e.getMessage());
     } finally {
       out.print(jsonResp.build());

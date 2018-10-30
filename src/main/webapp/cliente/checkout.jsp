@@ -8,17 +8,17 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="pt" tagdir="/WEB-INF/tags/" %>
+<c:set var="basePath" value="${pageContext.servletContext.contextPath}"></c:set>
 <pt:principal titulo="Feria Web">
   <jsp:attribute name="contenido">
-    <div id="content" class="col-sm-12">
+    <div id="content" class="col-sm-9">
       <c:set var="detalleCarroList" value="${sessionScope.CARRO_COMPRA.getDetalleCarroList()}"></c:set>
       <c:set var="cliente" value="${sessionScope.cliente}"></c:set>
       <c:if test="${detalleCarroList.size() == 0}">
-        <h1>Tu carro se encuentra vacío...</h1>
+        <h2>Tu carro se encuentra vacío...</h2>
       </c:if>
       <c:if test="${detalleCarroList.size() > 0}">
-        <h1>Confirme su Pedido</h1>
-
+        <h2>Confirme su Pedido</h2>
         <div class="table-responsive">
           <table class="table table-bordered">
             <thead>
@@ -44,7 +44,7 @@
                   <tr>
                     <td class="text-center">
                       <a href="${pageContext.servletContext.contextPath}/servlet/producto?accion=pdp&idp=${id_producto}">
-                      <img width="50" src="${url_imagen}" alt="${nombre}" title="${nombre}" class="img-thumbnail"/>
+                      <img width="50" src="${basePath}${url_imagen}" alt="${nombre}" title="${nombre}" class="img-thumbnail"/>
                     </a>
                   </td>
                   <td class="text-left" style="vertical-align: middle;">
@@ -97,7 +97,6 @@
               </table>
             </div>
           </div>
-
           <div class="panel-group" id="accordion">
             <!--medio de pago-->
             <div class="panel panel-default">
@@ -112,12 +111,11 @@
                 <div class="panel-body text-center">
                   <label>
                     <input type="radio" name="pago" value="webpay">
-                    <img width="300" src="${pageContext.servletContext.contextPath}/img/webpay.png"/>
+                    <img width="200" src="${basePath}/img/webpay.png"/>
                 </label>
               </div>
             </div>
           </div>
-
           <!--dirección de envío-->
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -130,38 +128,13 @@
             <div id="collapse-shipping" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
               <div class="panel-body">
                 <h3>Seleccione una dirección, o agregue una nueva.</h3>
-                <%--<c:forEach items="${cliente.getDireccionList()}" var="direccion">--%>
                 <div id="mis-direcciones" class="form-group required">
-                  <!--                    <div class="radio">
-                                        <label>
-                                          <input type="radio" name="optradio">
-                  
-                </label>
-              </div>-->
                 </div>
-                <%--</c:forEach>--%>
                 <button data-toggle="modal" data-target="#modal-direccion" type="button" id="agregar-direccion" data-loading-text="Cargando..." class="btn btn-primary">Agregar</button>
               </div>
             </div>
           </div>
-
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title"><a href="#collapse-voucher" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle collapsed" aria-expanded="false">Use Gift Certificate <i class="fa fa-caret-down"></i></a></h4>
-            </div>
-            <div id="collapse-voucher" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-              <div class="panel-body">
-                <label class="col-sm-2 control-label" for="input-voucher">Enter your gift certificate code here</label>
-                <div class="input-group">
-                  <input type="text" name="voucher" value="" placeholder="Enter your gift certificate code here" id="input-voucher" class="form-control">
-                  <span class="input-group-btn">
-                    <input type="submit" value="Apply Gift Certificate" id="button-voucher" data-loading-text="Loading..." class="btn btn-primary">
-                  </span> </div>
-              </div>
-            </div>
-          </div>
         </div>                  
-
         <!--botones-->
         <div class="buttons clearfix">
           <div class="pull-left">
@@ -221,8 +194,8 @@
     </div>
     <script>
       $(document).ready(function () {
-        
-        $('#add-direccion').on('submit', function(e){
+
+        $('#add-direccion').on('submit', function (e) {
 //          e.preventDefault();
           console.log('submit');
         });
@@ -259,5 +232,6 @@
         });
       });
     </script>
+    <%@include file="../WEB-INF/tags/_aside_cliente_.jsp" %>
   </jsp:attribute>
 </pt:principal>

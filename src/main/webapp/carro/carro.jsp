@@ -8,66 +8,78 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="pt" tagdir="/WEB-INF/tags/" %>
+<c:set var="basePath" value="${pageContext.servletContext.contextPath}"></c:set>
 <pt:principal titulo="Feria Web">
   <jsp:attribute name="contenido">
     <div id="content" class="col-sm-9">
       <c:set var="detalleCarroList" value="${sessionScope.CARRO_COMPRA.getDetalleCarroList()}"></c:set>
       <c:if test="${detalleCarroList.size() == 0}">
-        <h1>Tu carro se encuentra vacío...</h1>
+        <h2>Tu carro se encuentra vacío...</h2>
       </c:if>
       <c:if test="${detalleCarroList.size() > 0}">
-        <!--<h1>Shopping Cart&nbsp;(10.00kg)</h1>-->
-        <form action="#" method="post" enctype="multipart/form-data">
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <td class="text-center">Imagen</td>
-                  <td class="text-left">Producto</td>
-                  <td class="text-left">U. Medida</td>
-                  <td class="text-left">Cantidad</td>
-                  <td class="text-right">Precio</td>
-                  <td class="text-right">Total</td>
-                </tr>
-              </thead>
-              <tbody>
-                <c:set var="total" value="0"></c:set>
-                <c:forEach items="${detalleCarroList}" var="item">
-                  <c:set var="nombre" value="${item.getProductoProductorId().getProductoId().getNombre()}"></c:set>
-                  <c:set var="url_imagen" value="${item.getProductoProductorId().getProductoId().getDescripcionHtml()}"></c:set>
-                  <c:set var="unidad_medida" value="${item.getProductoProductorId().getProductoId().getUnidadMedidaId().getNombre()}"></c:set>
-                  <c:set var="precio" value="${item.getProductoProductorId().getPrecio()}"></c:set>
-                  <c:set var="cantidad" value="${item.getCantidad()}"></c:set>
-                  <c:set var="total" value="${total + (cantidad * precio)}"></c:set>
-                  <c:set var="id_producto" value="${item.getProductoProductorId().getProductoId().getId()}"></c:set>
-                    <tr>
-                      <td class="text-center">
-                        <a href="${pageContext.servletContext.contextPath}/servlet/producto?accion=pdp&idp=${id_producto}">
-                        <img width="50" src="${url_imagen}" alt="iPhone" title="iPhone" class="img-thumbnail">
-                      </a>
-                    </td>
-                    <td class="text-left" style="vertical-align: middle;">
+        <h2>Carro de Compras</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <td class="text-center">Imagen</td>
+                <td class="text-left">Producto</td>
+                <td class="text-center">U. Medida</td>
+                <td class="text-center">Cantidad</td>
+                <td class="text-right">Precio</td>
+                <td class="text-right">Total</td>
+                <td class="text-center">Quitar Producto</td>
+              </tr>
+            </thead>
+            <tbody>
+              <c:set var="total" value="0"></c:set>
+              <c:set var="cont" value="0"></c:set>
+              <c:forEach items="${detalleCarroList}" var="item">
+                <c:set var="nombre" value="${item.getProductoProductorId().getProductoId().getNombre()}"></c:set>
+                <c:set var="url_imagen" value="${item.getProductoProductorId().getProductoId().getDescripcionHtml()}"></c:set>
+                <c:set var="unidad_medida" value="${item.getProductoProductorId().getProductoId().getUnidadMedidaId().getNombre()}"></c:set>
+                <c:set var="precio" value="${item.getProductoProductorId().getPrecio()}"></c:set>
+                <c:set var="cantidad" value="${item.getCantidad()}"></c:set>
+                <c:set var="total" value="${total + (cantidad * precio)}"></c:set>
+                <c:set var="id_producto" value="${item.getProductoProductorId().getProductoId().getId()}"></c:set>
+                <c:set var="id" value="${item.getProductoProductorId().getId()}"></c:set>
+                <c:set var="stock" value="${item.getProductoProductorId().getCantidad()}"></c:set>
+                  <tr>
+                    <td class="text-center">
                       <a href="${pageContext.servletContext.contextPath}/servlet/producto?accion=pdp&idp=${id_producto}">
-                        ${nombre}
-                      </a>
-                    </td>
-                    <td class="text-left" style="vertical-align: middle;">${unidad_medida}</td>
-                    <td class="text-left" style="vertical-align: middle;"><div class="input-group btn-block" style="max-width: 200px;">
-                        <input type="text" name="quantity[178161]" value="${cantidad}" size="1" class="form-control">
-                        <span class="input-group-btn">
-                          <button type="button" data-toggle="tooltip" title="" class="btn btn-primary" onclick="alert('Función no implementada.')"  data-original-title="Update"><i class="fa fa-refresh"></i></button>
-                          <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" onclick="alert('Función no implementada.')" data-original-title="Remove"><i class="fa fa-times-circle"></i></button>
-                        </span></div></td>
-                    <td class="text-right" style="vertical-align: middle;">$ <fmt:formatNumber type="number">${precio}</fmt:formatNumber></td>
-                    <td class="text-right" style="vertical-align: middle;">$ <fmt:formatNumber type="number">${precio * cantidad}</fmt:formatNumber></td>
-                    </tr>
-                </c:forEach>
-                <c:set var="neto" value="${total / 1.19}"></c:set>
-                <c:set var="iva" value="${total - neto}"></c:set>
-                </tbody>
-              </table>
-            </div>
-          </form>
+                      <img width="50" src="${basePath}${url_imagen}" alt="${nombre}" title="${nombre}" class="img-thumbnail">
+                    </a>
+                  </td>
+                  <td class="text-center" style="vertical-align: middle;">
+                    <a href="${pageContext.servletContext.contextPath}/servlet/producto?accion=pdp&idp=${id_producto}">
+                      ${nombre}
+                    </a>
+                  </td>
+                  <td class="text-center" style="vertical-align: middle;">${unidad_medida}</td>
+                  <td class="text-center" style="vertical-align: middle;">
+                    <button data-id="${id}" class="menos btn btn-link btn-xs" data-toggle="tooltip" title="Disminuir Cantidad">
+                      <i class="fa fa-minus" aria-hidden="true"></i>
+                    </button>
+                    <input disabled="" class="cant-${id} form-control input-sm" style="width: 40px; display: inline; text-align: center" type="text" name="cantidad" value="${cantidad}" size="2" id="cant"/>
+                    <button data-stock="${stock}" data-id="${id}" class="mas btn btn-link btn-xs" data-toggle="tooltip" title="Aumentar Cantidad">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                  <td class="text-right" style="vertical-align: middle;">$ <fmt:formatNumber type="number">${precio}</fmt:formatNumber></td>
+                  <td class="text-right" style="vertical-align: middle;">$ <fmt:formatNumber type="number">${precio * cantidad}</fmt:formatNumber></td>
+                    <td class="text-center" style="vertical-align: middle;">
+                      <button onclick="carro.quitar(${cont});location.reload();" class="btn btn-xs btn-danger" data-toggle="tooltip" title="Quitar ${nombre}">
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+                <c:set var="cont" value="${cont + 1}"></c:set>
+              </c:forEach>
+              <c:set var="neto" value="${total / 1.19}"></c:set>
+              <c:set var="iva" value="${total - neto}"></c:set>
+              </tbody>
+            </table>
+          </div>
           <br>
           <div class="row">
             <div class="col-sm-4 col-sm-offset-8">
@@ -97,16 +109,37 @@
             <div class="pull-left">
               <a href="${pageContext.servletContext.contextPath}" class="btn btn-warning">Continuar comprando</a>
           </div>
-            <!--<form action="${pageContext.servletContext.contextPath}/webpay" method="post">-->
-          <!--<input type="hidden" name="action" value="webpayNormalInit"/>-->
           <div class="pull-right">
             <a href="${pageContext.servletContext.contextPath}/cliente/checkout.jsp" class="btn btn-success">Confirmar Pedido</a>
-            <!--<input class="btn btn-primary btn-inverse" type="submit" value="Confirmar Pedido"/>-->
           </div>
-          <!--</form>-->
         </div>
       </c:if>
     </div>
+    <script>
+      $(document).ready(function () {
+        //Botón más
+        $('.mas').click(function (e) {
+          e.preventDefault();
+          var id = $(this).attr('data-id');
+          var stock = $(this).attr('data-stock');
+          var cant = $(this).parents('div').find('.cant-' + id).val();
+          cant++;
+          if (cant > stock)
+            return;
+          carro.actualizar($(this), id, 1);
+        });
+        //Botón menos
+        $('.menos').click(function (e) {
+          e.preventDefault();
+          var id = $(this).attr('data-id');
+          var cant = $(this).parents('div').find('.cant-' + id).val();
+          cant--;
+          if (cant < 1)
+            return;
+          carro.actualizar($(this), id, -1);
+        });
+      });
+    </script>
     <%@include file="../WEB-INF/tags/_aside_cliente_.jsp" %>
   </jsp:attribute>
 </pt:principal>

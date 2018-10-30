@@ -3,7 +3,7 @@
 //  function pruebaplp(){
 //    console.log(654);
 //  }
-const BASE_URL = '/ecommerce/servlet/';
+const BASE_URL = '/ecommerce/servlet';
 
 function formatNumber(numero) {
   return numero.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1.');
@@ -13,7 +13,7 @@ var carro = {
     $(btn).attr("disabled", true);
     var cantidad = $(btn).parents('div').find('.cant-' + id_producto).val();
     $.ajax({
-      url: 'carro',
+      url: BASE_URL + '/carro',
       type: 'post',
       data: 'action=agregar&csrf_token=' + csrf_token + '&id_producto=' + id_producto + '&cantidad=' + (typeof (cantidad) != 'undefined' ? cantidad : 1),
       dataType: 'json',
@@ -43,10 +43,33 @@ var carro = {
     });
   },
 
-  'quitar': function (item_id) {
-//    alert(id_producto);
+  'actualizar': function (btn, id_producto, cant) {
+    $(btn).attr("disabled", true);
+    console.log(id_producto);
     $.ajax({
-      url: BASE_URL + 'carro',
+      url: BASE_URL + '/carro',
+      type: 'post',
+      data: 'action=actualizar&id_producto=' + id_producto + '&cant=' + cant,
+      dataType: 'json',
+      beforeSend: function () {
+//        $('#cart > button').button('loading');
+      },
+      complete: function () {
+        $(btn).removeAttr("disabled");
+        location.reload();
+      },
+      success: function (json) {
+        console.log(json);
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+      }
+    });
+  },
+
+  'quitar': function (item_id) {
+    $.ajax({
+      url: BASE_URL + '/carro',
       type: 'post',
       data: "action=eliminar&item_id=" + item_id,
       dataType: 'json',
@@ -74,7 +97,7 @@ var carro = {
 
 function recargarMiniCarro() {
   $.ajax({
-    url: BASE_URL + 'carro',
+    url: BASE_URL + '/carro',
     type: 'get',
     dataType: 'json',
     success: function (data, textStatus, jqXHR) {

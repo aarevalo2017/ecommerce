@@ -12,7 +12,6 @@ import cl.feriaweb.ecommerce.entity.BusquedaProducto;
 import cl.feriaweb.ecommerce.entity.Categoria;
 import cl.feriaweb.ecommerce.entity.Producto;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -48,12 +47,8 @@ public class HomeController extends HttpServlet {
       request.getSession().setAttribute("token", token);
       List<BusquedaProducto> productos = productoProductorFacade.spBuscarHome();
       request.setAttribute("productos", productos);
-      
-//      List<Producto> menuProductos = productoFacade.findAll();
       List<Producto> menuProductos = productoFacade.spTodos();
       request.getSession().setAttribute("menuProductos", menuProductos);
-      
-//      List<Categoria> categorias = categoriaFacade.findAll();
       List<Categoria> categorias = categoriaFacade.spTodos();
       request.getSession().setAttribute("categorias", categorias);
 //      categorias.get(0).getProductoList()

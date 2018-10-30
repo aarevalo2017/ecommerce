@@ -20,8 +20,6 @@ import com.transbank.webpay.wswebpay.service.TransactionResultOutput;
 import com.transbank.webpay.wswebpay.service.WsInitTransactionOutput;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;

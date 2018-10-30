@@ -50,9 +50,6 @@ public class ProductoController extends HttpServlet {
   private static final String ACC_PDP = "pdp";
 
   @EJB
-  private CategoriaFacade categoriaFacade;
-
-  @EJB
   private ProductoProductorFacade productoProductorFacade;
   private static final Logger log = Logger.getLogger(ProductoController.class.getName());
 
@@ -130,10 +127,8 @@ public class ProductoController extends HttpServlet {
       int token = new Random().nextInt(999999999);
       request.getSession().setAttribute("token", token);
       String criterio = request.getParameter(IN_CRITERIO);
-//      List<ProductoProductor> productos = productoProductorFacade.spBuscarTodos(criterio);
       List<BusquedaProducto> productos = productoProductorFacade.spBuscarProductos(criterio);
       request.setAttribute("productos", productos);
-//      request.getRequestDispatcher("/plp.jsp").forward(request, response);
       request.getRequestDispatcher("/plp_1.jsp").forward(request, response);
     } catch (Exception e) {
       log.log(Level.SEVERE, e.getMessage());
@@ -144,8 +139,6 @@ public class ProductoController extends HttpServlet {
   private void getPdp(HttpServletRequest request, HttpServletResponse response) throws IOException {
     try {
       int idp = Integer.parseInt(request.getParameter(IN_ID_PRODUCTO));
-//      ProductoProductor producto = productoProductorFacade.find(idp);
-//      Producto producto = productoFacade.find(idp);
       Producto producto = productoFacade.spBuscar(idp);
       List<ProductoProductor> productores = producto.getProductoProductorList();
       request.setAttribute("producto", producto);
