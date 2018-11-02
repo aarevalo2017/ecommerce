@@ -12,8 +12,10 @@ import cl.feriaweb.ecommerce.entity.DetalleCarro;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -82,7 +84,7 @@ public class CarroController extends HttpServlet {
     } catch (Exception e) {
       System.out.println(e.getMessage());
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      JsonObjectBuilder obj = Json.createObjectBuilder().add("error", "kjh");
+      JsonObjectBuilder obj = Json.createObjectBuilder().add("error", e.getMessage());
       jsonResp.add(obj);
     } finally {
       out.print(jsonResp.build());
@@ -148,6 +150,7 @@ public class CarroController extends HttpServlet {
   private void agregarProducto(HttpServletRequest request, HttpServletResponse response) throws IOException {
     PrintWriter out = response.getWriter();
     response.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
     JsonObjectBuilder jsonResp = null;
 //    jsonResp = Json.createObjectBuilder().add("redirect", "creado");
     try {
@@ -172,7 +175,8 @@ public class CarroController extends HttpServlet {
       item.setProductoProductorId(productoProductorFacade.spBuscar(idProductoProductor));
       boolean existeItem = false;
       for (DetalleCarro detalle : detalleItem) {
-        if (detalle.getProductoProductorId().getId() == item.getProductoProductorId().getId()) {
+//        if (detalle.getProductoProductorId().getId() == item.getProductoProductorId().getId()) {
+        if (detalle.getProductoProductorId().equals(item.getProductoProductorId())) {
           detalle.setCantidad(detalle.getCantidad() + item.getCantidad());
           existeItem = true;
           break;
@@ -185,9 +189,10 @@ public class CarroController extends HttpServlet {
       for (DetalleCarro detalleCarro : carro.getDetalleCarroList()) {
         totalCarro += (detalleCarro.getCantidad() * detalleCarro.getProductoProductorId().getPrecio());
       }
+      NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("cl", "cl"));
       int totalItems = carro.getDetalleCarroList().size();
-      jsonResp = Json.createObjectBuilder().add("success", "Success: You have added <a href=\"https://demo.opencart.com/index.php?route=product/product&amp;product_id=41\">iMac</a> to your <a href=\"https://demo.opencart.com/index.php?route=checkout/cart\">shopping cart</a>!")
-              .add("total", totalItems + " Producto(s) - $ " + totalCarro);
+      jsonResp = Json.createObjectBuilder().add("success", "<strong>" + item.getProductoProductorId().getProductoId().getNombre() + "</strong> agregado al carro.")
+              .add("total", totalItems + " Producto(s) $ " + formatter.format(totalCarro));
     } catch (Exception e) {
       jsonResp = Json.createObjectBuilder().add("redirect", "redirect...");
       log.log(Level.SEVERE, e.getMessage());

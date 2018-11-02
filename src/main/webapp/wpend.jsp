@@ -4,7 +4,6 @@
     Author     : Alejandro
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="pt" tagdir="/WEB-INF/tags/" %>
 <pt:principal titulo="Feria Web">
@@ -14,7 +13,7 @@
       <br>
       <table class="table table-bordered">
         <tr>
-          <td>CÃ³digo AutorizaciÃ³n</td>
+          <td>Código Autorización</td>
           <td>
             <p id="authorizationCode"></p>
           </td>
@@ -32,7 +31,7 @@
           </td>
         </tr>
         <tr>
-          <td>NÃºmero de Tarjeta</td>
+          <td>Número de Tarjeta</td>
           <td>
             <p id="cardNumber"></p>
           </td>
@@ -44,13 +43,13 @@
           </td>
         </tr>
         <tr>
-          <td>NÃºmero de Cuotas</td>
+          <td>Número de Cuotas</td>
           <td>
             <p id="sharesNumber"></p>
           </td>
         </tr>
         <tr>
-          <td>Fecha y Hora de TransacciÃ³n</td>
+          <td>Fecha y Hora de Transacción</td>
           <td>
             <p id="transactionDate"></p>
           </td>
@@ -61,7 +60,7 @@
         $('#authorizedAmount').html(formatNumber(localStorage.getItem('authorizedAmount')));
         $('#buyOrder').html(localStorage.getItem('buyOrder'));
         $('#cardNumber').html('**** **** **** ' + localStorage.getItem('cardNumber'));
-        $('#paymentTypeCode').html(localStorage.getItem('paymentTypeCode') == 'VC' ? 'CrÃ©dito' : 'DÃ©bito');
+        $('#paymentTypeCode').html(localStorage.getItem('paymentTypeCode') == 'VC' ? 'Crédito' : 'Débito');
         $('#sharesNumber').html(localStorage.getItem('sharesNumber'));
         $('#transactionDate').html(localStorage.getItem('transactionDate'));
         localStorage.clear();

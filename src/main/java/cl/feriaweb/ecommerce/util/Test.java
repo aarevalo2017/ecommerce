@@ -14,9 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -46,6 +48,11 @@ public class Test {
    * @param args the command line arguments
    */
   public static void main(String[] args) throws IOException, UnirestException, AddressException {
+    double money = 15250;
+    NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("cl", "cl"));
+    String moneyString = formatter.format(money);
+    System.out.println(moneyString);
+
 //    /*  Get the Template  */
 //    Template t = Velocity.getTemplate("/src/main/resources/email/Helloworld.vm");
 ////    Velocity.g
@@ -57,7 +64,6 @@ public class Test {
 //    t.merge(context, writer);
 //    /* show the World */
 //    System.out.println(writer.toString());
-
 //    Comuna comuna = DivisionPolitica.getComunaByCodigo("13201");
 //    Provincia provincia = DivisionPolitica.getProvinciaByCodigo(comuna.getCodigo_padre());
 //    Region region = DivisionPolitica.getRegionByCodigo(provincia.getCodigo_padre());

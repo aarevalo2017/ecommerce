@@ -49,7 +49,7 @@
         </li>
         <li>
           <a href="${pageContext.servletContext.contextPath}/cliente/pago.jsp" title="Checkout">
-            <i class="fa fa-money"></i>
+            <i class="fa fa-dollar-sign"></i>
             <span class="hidden-xs hidden-sm hidden-md">Pagar</span>
           </a>
         </li>

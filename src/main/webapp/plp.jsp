@@ -5,14 +5,13 @@
 --%>
 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="pt" tagdir="/WEB-INF/tags/" %>
 <pt:principal titulo="Feria Web">
   <jsp:attribute name="contenido">
     <div id="content" class="col-sm-9 col-lg-9 col-md-9">
-      <h1>BÃºsqueda de - ${param.criterio}</h1>
-      <label class="control-label" for="input-search">Criterio de bÃºsqueda</label>
+      <h1>Búsqueda de - ${param.criterio}</h1>
+      <label class="control-label" for="input-search">Criterio de búsqueda</label>
       <div class="row">
         <form method="POST" action="${pageContext.servletContext.contextPath}/servlet/producto">
           <input type="hidden" name="accion" value="buscarProducto"/>
@@ -127,7 +126,7 @@
             return;
           $(this).parents('div').find('.cant-' + id).val(cant);
         });
-        //BotÃ³n menos
+        //Botón menos
         $('.menos').click(function (e) {
           e.preventDefault();
           var id = $(this).attr('data-id');

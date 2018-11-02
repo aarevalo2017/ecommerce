@@ -53,7 +53,7 @@ public class DireccionFacade extends AbstractFacade<Direccion> {
       StoredProcedureQuery query = em.createStoredProcedureQuery("PKG_DIRECCION.SP_AGREGAR");
       query.registerStoredProcedureParameter("P_ID", Number.class, ParameterMode.IN);
       query.registerStoredProcedureParameter("P_DIRECCION", String.class, ParameterMode.IN);
-      query.registerStoredProcedureParameter("P_CODIGO_COMUNA", Number.class, ParameterMode.IN);
+      query.registerStoredProcedureParameter("P_CODIGO_COMUNA", String.class, ParameterMode.IN);
       query.registerStoredProcedureParameter("P_CODIGO_POSTAL", Number.class, ParameterMode.IN);
       query.registerStoredProcedureParameter("P_LATITUD", Number.class, ParameterMode.IN);
       query.registerStoredProcedureParameter("P_LONGITUD", Number.class, ParameterMode.IN);
@@ -76,11 +76,9 @@ public class DireccionFacade extends AbstractFacade<Direccion> {
       query.setParameter("P_CLIENTE_ID", direccion.getClienteId().getId());
       query.setParameter("P_ELIMINADO", direccion.getEliminado());
       query.execute();
-
       return true;
     } catch (Exception e) {
-      System.out.println(e.getMessage());
-//      log.log(Level.SEVERE, e.getMessage());
+      log.log(Level.SEVERE, e.getMessage());
       return false;
     }
   }

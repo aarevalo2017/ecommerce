@@ -4,7 +4,6 @@
     Author     : Alejandro
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="pt" tagdir="/WEB-INF/tags/" %>
 <pt:principal titulo="Feria Web">
@@ -13,7 +12,7 @@
       <div class="container">
         <div class="alert alert-danger alert-dismissible col-sm-12 container">
           <i class="fa fa-exclamation-circle"></i>
-          AtenciÃ³n: No existe coincidencia para direcciÃ³n de E-Mail y/o ContraseÃ±a.
+          Atención: No existe coincidencia para dirección de E-Mail y/o Contraseña.
           <c:if test="${not empty sessionScope.ATTR_INTENTO_LOGIN}">
             <br>
             <strong>Le quedan ${3 - sessionScope.ATTR_INTENTO_LOGIN} intentos disponibles.</strong>
@@ -27,7 +26,7 @@
           <div class="well">
             <h2>Nuevo Cliente</h2>
             <p><strong>Registre su cuenta</strong></p>
-            <p class="text-justify">Al crear su cuenta de usuario podrÃ¡ comprar de una manera mas rapida, revisar sus pedidos y el estado de sus ordenes ademÃ¡s de recibir ofertas y promociones.</p>
+            <p class="text-justify">Al crear su cuenta de usuario podrá comprar de una manera mas rapida, revisar sus pedidos y el estado de sus ordenes además de recibir ofertas y promociones.</p>
             <a href="${pageContext.servletContext.contextPath}/registro.jsp" class="btn btn-primary">Continuar</a></div>
         </div>
         <div class="col-sm-6">
@@ -37,15 +36,15 @@
             <!--<form action="j_security_check" method="post">-->
             <form action="${pageContext.servletContext.contextPath}/login" method="post">
               <div class="form-group">
-                <label class="control-label" for="input-email">Correo electrÃ³nico</label>
+                <label class="control-label" for="input-email">Correo electrónico</label>
                 <input required type="text" name="j_username" value="" placeholder="" id="input-email" class="form-control" />
               </div>
               <div class="form-group">
-                <label class="control-label" for="input-password">ContraseÃ±a</label>
-                <input required type="password" name="j_password" value="" placeholder="ContraseÃ±a" id="input-password" class="form-control" />
-                <a href="${pageContext.servletContext.contextPath}/reset-password.jsp">OlvidÃ© mi contraseÃ±a</a>
+                <label class="control-label" for="input-password">Contraseña</label>
+                <input required type="password" name="j_password" value="" placeholder="Contraseña" id="input-password" class="form-control" />
+                <a href="${pageContext.servletContext.contextPath}/reset-password.jsp">Olvidé mi contraseña</a>
               </div>
-              <input type="submit" value="Iniciar SesiÃ³n" class="btn btn-primary" />
+              <input type="submit" value="Iniciar Sesión" class="btn btn-primary" />
             </form>
           </div>
         </div>

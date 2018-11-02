@@ -6,7 +6,7 @@
 const BASE_URL = '/ecommerce/servlet';
 
 function formatNumber(numero) {
-  return numero.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1.');
+  return numero.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1,');
 }
 var carro = {
   'agregar': function (btn, id_producto, csrf_token) {
@@ -27,13 +27,18 @@ var carro = {
       success: function (json) {
         $('.alert-dismissible, .text-danger').remove();
         if (json['success']) {
-          $('#content').parent().before('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+        new PNotify({
+          title: 'Todo bien',
+          text: json['success'],
+          type: 'success',
+          styling: 'bootstrap3',
+          delay: 2000
+        });
           setTimeout(function () {
-//                    $('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + json['total'] + '</span>');
+            $('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + json['total'] + '</span>');
           }, 100);
-//                  $('#cart > ul').load('index.php?route=common/cart/info ul li');
-//                  $('#cart > ul').load('carro');
           recargarMiniCarro();
+          $('html, body').animate({scrollTop: 0}, 'slow');
           $('#cart').addClass('open');
         }
       },
@@ -80,10 +85,11 @@ var carro = {
       },
       success: function (json) {
         new PNotify({
-//          title: '',
+          title: 'Todo bien',
           text: json.ok,
-          type: 'success',
-          styling: 'bootstrap3'
+          type: 'info',
+          styling: 'bootstrap3',
+          delay: 2000
         });
         console.log(json);
       },
@@ -149,8 +155,8 @@ function recargarMiniCarro() {
       carroHtml += "</div>";
       carroHtml += "</li>";
       $('#cart > ul').html(carroHtml);
-      $('html, body').animate({scrollTop: 0}, 'slow');
-      $('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + data.length + ' producto(s) $ ' + formatNumber(total) + '</span>');
+      var buttonHtml = '<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + data.length + ' producto(s) $ CLP ' + formatNumber(total) + '</span>';
+      $('#cart > button').html(buttonHtml);
     },
     error: function (jqXHR, textStatus, errorThrown) {
       console.log(errorThrown + "\r\n" + jqXHR.statusText + "\r\n" + jqXHR.responseText);

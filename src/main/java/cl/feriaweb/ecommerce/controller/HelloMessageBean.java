@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -69,6 +70,7 @@ public class HelloMessageBean implements MessageListener {
 
   private void enviarMailBienvenida(TextMessage textMessage) {
     try {
+      String ambiente = ResourceBundle.getBundle("config").getString("ambiente");
       String nombre = textMessage.getText().split("-")[1];
       String mail = textMessage.getText().split("-")[2];
       String token = textMessage.getText().split("-")[3];
@@ -79,7 +81,7 @@ public class HelloMessageBean implements MessageListener {
       Template t = Velocity.getTemplate("email/bienvenida.vm");
       VelocityContext context = new VelocityContext();
       context.put("nombre", nombre);
-      context.put("url", "http://localhost:8080/ecommerce/servlet/cliente?accion=validar_mail&token=" + token);
+      context.put("url", ambiente + "/ecommerce/servlet/cliente?accion=validar_mail&token=" + token);
       StringWriter writer = new StringWriter();
       t.merge(context, writer);
       sendMail(mail, "La Vega Online", writer.toString());

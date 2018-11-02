@@ -43,6 +43,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +56,7 @@ import org.apache.commons.lang.RandomStringUtils;
  *
  * @author Alejandro
  */
+@MultipartConfig(maxFileSize = 1024 * 1024)
 @WebServlet(name = "TestServlet", urlPatterns = {"/test"})
 public class TestServlet extends HttpServlet {
 
@@ -96,43 +98,61 @@ public class TestServlet extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//    String msg = request.getParameter("msg");
+//    response.getWriter().print(msg);
 //    System.out.println(System.getProperty("com.sun.aas.instanceRoot"));
 //    System.out.println(request.getContextPath());
 //    System.out.println(request.getServletPath());
 //    System.out.println(request.getServletPath());
 //    System.out.println(request.getServletContext().getRealPath(""));
 //**********************************************************************************************************************************
-    String SAVE_DIR = "img/productos";
-    String appPath = request.getServletContext().getRealPath("");
-    String savePath = appPath + File.separator + SAVE_DIR;
-    File fileSaveDir = new File(savePath);
-    if (!fileSaveDir.exists()) {
-      fileSaveDir.mkdir();
-    }
-    List<Producto> productos = productoFacade.findAll();
-//    Producto producto = productoFacade.find(20);
-    URL url;
-    InputStream is;
-    byte[] bytes;
-    OutputStream out;
-    for (Producto producto : productos) {
-//      url = new URL(producto.getDescripcionHtml());
-//      String nombreArchivo = producto.getNombre().replaceAll(" ", "_") + ".jpg";
-      String nombreArchivo = RandomStringUtils.randomAlphanumeric(16) + ".jpg";
-//      is = url.openStream();
-//      bytes = IOUtils.toByteArray(is);
-      out = new FileOutputStream(new File(savePath + File.separator + nombreArchivo));
-//      out.write(bytes);
-      if (producto.getFoto() != null) {
-        out.write(producto.getFoto());
-      }
-      producto.setDescripcionHtml("/" + SAVE_DIR + "/" + nombreArchivo);
-      productoFacade.edit(producto);
-      System.out.println(nombreArchivo + " cargada.");
-    }
-    response.getWriter().print("foto cargada");
+//    String SAVE_DIR = "img/productos";
+//    String appPath = request.getServletContext().getRealPath("");
+//    String savePath = appPath + File.separator + SAVE_DIR;
+//    File fileSaveDir = new File(savePath);
+//    if (!fileSaveDir.exists()) {
+//      fileSaveDir.mkdir();
+//    }
+//    List<Producto> productos = productoFacade.findAll();
+////    Producto producto = productoFacade.find(20);
+//    URL url;
+//    InputStream is;
+//    byte[] bytes;
+//    OutputStream out;
+//    for (Producto producto : productos) {
+////      url = new URL(producto.getDescripcionHtml());
+////      String nombreArchivo = producto.getNombre().replaceAll(" ", "_") + ".jpg";
+//      String nombreArchivo = RandomStringUtils.randomAlphanumeric(16) + ".jpg";
+////      is = url.openStream();
+////      bytes = IOUtils.toByteArray(is);
+//      out = new FileOutputStream(new File(savePath + File.separator + nombreArchivo));
+////      out.write(bytes);
+//      if (producto.getFoto() != null) {
+//        out.write(producto.getFoto());
+//      }
+//      producto.setDescripcionHtml("/" + SAVE_DIR + "/" + nombreArchivo);
+//      productoFacade.edit(producto);
+//      System.out.println(nombreArchivo + " cargada.");
+//    }
+//    response.getWriter().print("foto cargada");
     //**********************************************************************************************************************************
-    //    List<Producto> productos = productoFacade.findAll();
+    InputStream inputStream = null;
+    Part part = request.getPart("file");
+    byte[] fotoUpload = null;
+    inputStream = part.getInputStream();
+    fotoUpload = IOUtils.toByteArray(inputStream);
+    
+    Foto foto = new Foto();
+    foto.setImagen(fotoUpload);
+    foto.setOrden(0);
+    foto.setProductoId(productoFacade.find(20));
+    foto.setEliminado(Short.MIN_VALUE);
+    
+//    fotoFacade.create(foto);
+//    fotoFacade.spAgregar(foto);
+    response.getWriter().print("Foto subida correctamente...");
+    //**********************************************************************************************************************************
+//    List<Producto> productos = productoFacade.findAll();
     ////    Producto producto = productoFacade.find(20);
     //    for (Producto producto : productos) {
     //      URL url = null;

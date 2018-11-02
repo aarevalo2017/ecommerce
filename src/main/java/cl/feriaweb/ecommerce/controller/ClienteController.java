@@ -297,40 +297,28 @@ public class ClienteController extends HttpServlet {
 
   private void agregarDireccion(HttpServletRequest request, HttpServletResponse response) throws IOException {
     PrintWriter out = response.getWriter();
-    out.print("agegar direccion");
     response.setCharacterEncoding("utf-8");
     response.setContentType("application/json");
-    JsonArrayBuilder jsonResp = Json.createArrayBuilder();
+    JsonObjectBuilder jsonResp = Json.createObjectBuilder();
     try {
       Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
       String direccion = request.getParameter("direccion");
-      int codigoComuna = Integer.parseInt(request.getParameter("comuna"));
-      int codPostal = Integer.parseInt(request.getParameter("cod-postal"));
+      String codigoComuna = request.getParameter("comuna");
       String alias = request.getParameter("alias");
       Direccion dir = new Direccion();
       dir.setDireccion(direccion);
       dir.setCodigoComuna(codigoComuna);
-      dir.setCodigoPostal(codPostal);
-      dir.setAlias(alias);
-      dir.setApellidos("Arevalo");
-      dir.setClienteId(cliente);
-      dir.setCodigoUbicacion("asdf");
-      dir.setEliminado(false);
       dir.setLatitud(BigDecimal.valueOf(-33.555));
       dir.setLongitud(BigDecimal.valueOf(-70.555));
-      dir.setNombre("Alejandro");
+      dir.setAlias(alias);
+      dir.setClienteId(cliente);
+      dir.setEliminado(false);
       direccionFacade.spAgregar(dir);
-        jsonResp.add(Json.createObjectBuilder()
-                .add("id", dir.getId())
-                .add("alias", dir.getAlias())
-                .add("direccion", dir.getDireccion())
-                .add("comuna", dir.getCodigoComuna())
-        );
+      jsonResp.add("success", "Dirección agregada.");
     } catch (Exception e) {
       System.out.println(e.getMessage());
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      JsonObjectBuilder obj = Json.createObjectBuilder().add("error", e.getMessage());
-      jsonResp.add(obj);
+      jsonResp.add("error", e.getMessage());
     } finally {
       out.print(jsonResp.build());
     }

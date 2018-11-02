@@ -17,6 +17,7 @@
         <h2>Tu carro se encuentra vacío...</h2>
       </c:if>
       <c:if test="${detalleCarroList.size() > 0}">
+        <i class="fa fa-info-circle fa-10x" aria-hidden="true" data-toggle="tooltip" title="Ayudame"></i>
         <h2>Carro de Compras</h2>
         <div class="table-responsive">
           <table class="table table-bordered">
@@ -110,7 +111,7 @@
               <a href="${pageContext.servletContext.contextPath}" class="btn btn-warning">Continuar comprando</a>
           </div>
           <div class="pull-right">
-            <a href="${pageContext.servletContext.contextPath}/cliente/checkout.jsp" class="btn btn-success">Confirmar Pedido</a>
+            <a data-toggle="tooltip" title="Pasar a pagar" href="${pageContext.servletContext.contextPath}/cliente/checkout.jsp" class="btn btn-success">Confirmar Pedido</a>
           </div>
         </div>
       </c:if>

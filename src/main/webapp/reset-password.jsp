@@ -4,22 +4,21 @@
     Author     : Alejandro
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="pt" tagdir="/WEB-INF/tags/" %>
 <pt:principal titulo="Feria Web">
   <jsp:attribute name="contenido">
     <div id="content" class="col-sm-9">
-      <h1>Â¿OlvidÃ³ su contraseÃ±a?</h1>
-      <p>Ingrese el correo electrÃ³nico asociado a su cuenta, al presionar el botÃ³n enviar le serÃ¡ enviado un enlace para reestablecer su contraseÃ±a.</p>
+      <h1>¿Olvidó su contraseña?</h1>
+      <p>Ingrese el correo electrónico asociado a su cuenta, al presionar el botón enviar le será enviado un enlace para reestablecer su contraseña.</p>
       <form action="${pageContext.servletContext.contextPath}/servlet/cliente" method="post" class="form-horizontal">
         <input type="hidden" name="accion" value="recuperarPassword"/>
         <fieldset>
-          <legend>Su correo electrÃ³nico</legend>
+          <legend>Su correo electrónico</legend>
           <div class="form-group required">
-            <label class="col-sm-2 control-label" for="input-email">Correo electrÃ³nico</label>
+            <label class="col-sm-2 control-label" for="input-email">Correo electrónico</label>
             <div class="col-sm-10">
-              <input type="text" name="email" value="" placeholder="Correo electrÃ³nico" id="email" class="form-control">
+              <input type="text" name="email" value="" placeholder="Correo electrónico" id="email" class="form-control">
             </div>
           </div>
         </fieldset>

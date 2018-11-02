@@ -45,7 +45,6 @@ public class Direccion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-//    @NotNull
     @Column(name = "ID")
     private Integer id;
     @Basic(optional = false)
@@ -56,7 +55,7 @@ public class Direccion implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "CODIGO_COMUNA")
-    private int codigoComuna;
+    private String codigoComuna;
     @Column(name = "CODIGO_POSTAL")
     private Integer codigoPostal;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -69,7 +68,6 @@ public class Direccion implements Serializable {
     @Column(name = "LONGITUD")
     private BigDecimal longitud;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "CODIGO_UBICACION")
     private String codigoUbicacion;
@@ -79,12 +77,10 @@ public class Direccion implements Serializable {
     @Column(name = "ALIAS")
     private String alias;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "NOMBRE")
     private String nombre;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "APELLIDOS")
     private String apellidos;
@@ -101,7 +97,7 @@ public class Direccion implements Serializable {
         this.id = id;
     }
 
-    public Direccion(Integer id, String direccion, int codigoComuna, BigDecimal latitud, BigDecimal longitud, String codigoUbicacion, String alias, String nombre, String apellidos) {
+    public Direccion(Integer id, String direccion, String codigoComuna, BigDecimal latitud, BigDecimal longitud, String codigoUbicacion, String alias, String nombre, String apellidos) {
         this.id = id;
         this.direccion = direccion;
         this.codigoComuna = codigoComuna;
@@ -129,11 +125,11 @@ public class Direccion implements Serializable {
         this.direccion = direccion;
     }
 
-    public int getCodigoComuna() {
+    public String getCodigoComuna() {
         return codigoComuna;
     }
 
-    public void setCodigoComuna(int codigoComuna) {
+    public void setCodigoComuna(String codigoComuna) {
         this.codigoComuna = codigoComuna;
     }
 

@@ -4,7 +4,7 @@
     Author     : Alejandro
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="pt" tagdir="/WEB-INF/tags/" %>
@@ -129,6 +129,7 @@
               <div class="panel-body">
                 <h3>Seleccione una dirección, o agregue una nueva.</h3>
                 <div id="mis-direcciones" class="form-group required">
+                  <h4>Cargando direcciones <i class="fas fa-spinner fa-spin"></i></h4>
                 </div>
                 <button data-toggle="modal" data-target="#modal-direccion" type="button" id="agregar-direccion" data-loading-text="Cargando..." class="btn btn-primary">Agregar</button>
               </div>
@@ -173,15 +174,11 @@
               </div>
               <div class="form-group">
                 <label for="direccion">Dirección:</label>
-                <input type="text" class="form-control" id="direccion" name="direccion">
-              </div>
-              <div class="form-group">
-                <label for="cod-postal">Código Postal:</label>
-                <input type="text" class="form-control" id="cod-postal" name="cod-postal">
+                <input type="text" class="form-control" id="direccion" name="direccion" maxlength="100" required>
               </div>
               <div class="form-group">
                 <label for="alias">Alias:</label>
-                <input type="text" class="form-control" id="alias" name="alias">
+                <input type="text" class="form-control" id="alias" name="alias" maxlength="50" required>
               </div>
             </div>
             <div class="modal-footer">
@@ -196,20 +193,46 @@
       $(document).ready(function () {
 
         $('#add-direccion').on('submit', function (e) {
-//          e.preventDefault();
-          console.log('submit');
-        });
-
-        $.getJSON("/ecommerce/servlet/cliente?accion=obtenerDirecciones&idc=" + ${cliente.getId()}, function (data) {
-          var direcciones = [];
-          var comuna = "";
-          $.each(data, function (k, v) {
-            console.log(v);
-            direcciones.push("<div class='radio'><label><input type='radio' name='optradio' value='" + v.id + "'>" + v.alias + " - " + v.direccion + " - " + v.comuna + "</label></div>");
+          e.preventDefault();
+          $.ajax({
+            url: "/ecommerce/servlet/cliente",
+            type: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function (json) {
+              if (json.success) {
+                new PNotify({
+                  title: 'Todo bien',
+                  text: json.success,
+                  type: 'success',
+                  styling: 'bootstrap3'
+                });
+                recargarDirecciones();
+                $('#add-direccion').trigger('reset')
+                $('#modal-direccion').modal('hide');
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              new PNotify({
+                title: 'Ups Algo salió mal',
+                text: errorThrown,
+                type: 'danger',
+                styling: 'bootstrap3'
+              });
+            }
           });
-          $("#mis-direcciones").html(direcciones);
         });
-
+        function recargarDirecciones() {
+          $.getJSON("/ecommerce/servlet/cliente?accion=obtenerDirecciones&idc=${cliente.getId()}", function (data) {
+            var direcciones = [];
+            var comuna = "";
+            $.each(data, function (k, v) {
+              console.log(v);
+              direcciones.push("<div class='radio'><label><input type='radio' name='optradio' value='" + v.id + "'>" + v.alias + " - " + v.direccion + " - " + v.comuna + "</label></div>");
+            });
+            $("#mis-direcciones").html(direcciones);
+          });
+        }
         $.getJSON("https://apis.digital.gob.cl/dpa/regiones", function (data) {
           var regiones = [];
           $.each(data, function (k, r) {
@@ -230,6 +253,7 @@
             $("#comuna").prop("disabled", false);
           });
         });
+        recargarDirecciones();
       });
     </script>
     <%@include file="../WEB-INF/tags/_aside_cliente_.jsp" %>

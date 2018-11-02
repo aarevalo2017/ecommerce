@@ -4,12 +4,12 @@
     Author     : Alejandro
 --%>
 
+<%--<%@tag language="java" description="put the tag description here" pageEncoding="UTF-8"%>--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@tag language="java" description="put the tag description here" pageEncoding="UTF-8"%>
 <%@attribute name="titulo" required="true" rtexprvalue="true"%>
 <%@attribute name="contenido" fragment="true"%>
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html>
   <%@include file="_head_.jsp" %>
   <body>
     <%@include file="_topnav_.jsp" %>

@@ -5,7 +5,6 @@
 --%>
 
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="pt" tagdir="/WEB-INF/tags/" %>
 <c:set var="basePath" value="${pageContext.servletContext.contextPath}"></c:set>
@@ -13,8 +12,8 @@
   <jsp:attribute name="contenido">
     <!--<div id="content" class="col-sm-9 col-lg-9 col-md-9">-->
     <div id="content">
-      <h1>BÃºsqueda de - ${param.criterio}</h1>
-      <label class="control-label" for="input-search">Criterio de bÃºsqueda</label>
+      <h1>Búsqueda de - ${param.criterio}</h1>
+      <label class="control-label" for="input-search">Criterio de búsqueda</label>
       <div class="row">
         <form method="POST" action="${pageContext.servletContext.contextPath}/servlet/producto">
           <input type="hidden" name="accion" value="buscarProducto"/>
@@ -94,7 +93,7 @@
       </div>
       <div class="row">
         <div class="col-sm-6 text-left"></div>
-        <div class="col-sm-6 text-right">Mostrando 1 de 1 (1 PÃ¡gina(s))</div>
+        <div class="col-sm-6 text-right">Mostrando 1 de 1 (1 Página(s))</div>
       </div>
     </div>
   </jsp:attribute>

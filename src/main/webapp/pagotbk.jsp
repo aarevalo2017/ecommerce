@@ -4,7 +4,6 @@
     Author     : Alejandro
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -26,7 +25,7 @@
       <input type="hidden" value="${requestScope.urlFinal}"/>
       <table>
         <tr>
-          <td>Id SesiÃ³n</td>
+          <td>Id Sesión</td>
           <td>${requestScope.idSession}</td>
         </tr>
         <tr>
